@@ -121,7 +121,7 @@ header {
 }
 
 .sidebar-section {
-  padding: 0 1rem 1rem;
+  padding: 0 1rem 1.5rem;
 }
 
 .sidebar-label {
@@ -130,14 +130,15 @@ header {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-muted);
-  padding: 0.5rem 0.75rem 0.35rem;
+  padding: 0.75rem 0.75rem 0.5rem;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.5rem 0.75rem;
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.25rem;
   border-radius: var(--radius);
   text-decoration: none;
   color: var(--text);
@@ -145,6 +146,7 @@ header {
   font-weight: 500;
   transition: background 0.15s, color 0.15s;
   cursor: pointer;
+  line-height: 1.4;
 }
 
 .sidebar-item:hover {
@@ -545,4 +547,173 @@ header {
   .info-grid { grid-template-columns: repeat(2, 1fr); }
   .hero h1 { font-size: 1.35rem; }
   .md-content { padding: 1.5rem; }
+}
+
+/* ── QUIZ STYLES ── */
+#quiz-container {
+  margin: 1.5rem 0;
+}
+
+.quiz-question {
+  margin: 0;
+}
+
+.quiz-question-header {
+  margin-bottom: 0.75rem;
+}
+
+.quiz-question-num {
+  display: inline-block;
+  background: var(--violet);
+  color: white;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.quiz-question-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 1rem;
+}
+
+.quiz-options {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.quiz-options li {
+  margin: 0.4rem 0;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: background 0.15s, border-color 0.15s;
+  overflow: hidden;
+}
+
+.quiz-options li:hover {
+  background: var(--yellow-light);
+  border-color: var(--yellow);
+}
+
+.quiz-options li.opt-correct {
+  background: #d4f4dd !important;
+  border-color: #4caf50 !important;
+}
+
+.quiz-options li.opt-wrong {
+  background: #ffd4d4 !important;
+  border-color: #f44336 !important;
+}
+
+.quiz-options input[type="radio"] {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: var(--violet);
+}
+
+.quiz-options label {
+  cursor: pointer;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  width: 100%;
+  user-select: none;
+}
+
+.opt-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background: var(--beige-mid);
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.quiz-check-btn {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  background: var(--violet);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s;
+  margin-bottom: 0.75rem;
+}
+
+.quiz-check-btn:hover:not(:disabled) {
+  background: #9b8ffb;
+  transform: translateY(-1px);
+}
+
+.quiz-check-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.quiz-feedback {
+  display: none;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  animation: fadeIn 0.25s ease;
+}
+
+.quiz-feedback.feedback-warning {
+  background: #fff8e1;
+  border: 2px solid #ffc107;
+  color: #7a5c00;
+  font-weight: 600;
+}
+
+.quiz-feedback.feedback-correct {
+  background: #d4f4dd;
+  border: 2px solid #4caf50;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.quiz-feedback.feedback-incorrect {
+  background: #ffd4d4;
+  border: 2px solid #f44336;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.fb-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.quiz-divider {
+  border: none;
+  border-top: 2px dashed var(--border);
+  margin: 2rem 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

@@ -43,7 +43,7 @@ bigcheese-mcp-workshop/
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/mguerrerobigcheese/bigcheese-mcp-workshop.git
+git clone https://github.com/bigcheeseuy/bigcheese-ai-platform-workshop.git
 cd bigcheese-mcp-workshop
 
 # 2. Seguir el Módulo 0 para levantar el entorno en AWS

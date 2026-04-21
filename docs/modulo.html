@@ -18,7 +18,7 @@
     </div>
   </a>
   <div class="header-right">
-    <a href="https://github.com/mguerrerobigcheese/bigcheese-mcp-workshop" target="_blank">
+    <a href="https://github.com/bigcheeseuy/bigcheese-ai-platform-workshop" target="_blank">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
       GitHub
     </a>
@@ -47,14 +47,14 @@
       <a class="sidebar-item" href="modulo.html?m=11" data-mod="11"><span class="mod-badge">11</span> Demo: Propuesta Comercial</a>
       <a class="sidebar-item" href="modulo.html?m=12" data-mod="12"><span class="mod-badge">12</span> Demo: Selección Candidatos</a>
       <a class="sidebar-item" href="modulo.html?m=13" data-mod="13"><span class="mod-badge">13</span> Repaso</a>
+      <a class="sidebar-item" href="modulo.html?m=14" data-mod="14"><span class="mod-badge">14</span> Evaluación</a>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Recursos</div>
-      <a class="sidebar-item" href="https://github.com/mguerrerobigcheese/bigcheese-mcp-workshop/tree/main/workshop-materials" target="_blank">📁 Materiales</a>
-      <a class="sidebar-item" href="https://github.com/mguerrerobigcheese/bigcheese-mcp-workshop/tree/main/bigcheese-mcp-starter" target="_blank">🚀 Código Starter</a>
-      <a class="sidebar-item" href="https://github.com/mguerrerobigcheese/bigcheese-mcp-workshop/tree/main/bigcheese-mcp-solution" target="_blank">✅ Solución</a>
+      <a class="sidebar-item" href="https://github.com/bigcheeseuy/bigcheese-ai-platform-workshop/tree/main/workshop-materials" target="_blank">📁 Materiales</a>
+      <a class="sidebar-item" href="https://github.com/bigcheeseuy/bigcheese-ai-platform-workshop/tree/main/bigcheese-mcp-starter" target="_blank">🚀 Código Starter</a>
+      <a class="sidebar-item" href="https://github.com/bigcheeseuy/bigcheese-ai-platform-workshop/tree/main/bigcheese-mcp-solution" target="_blank">✅ Solución</a>
       <a class="sidebar-item" href="https://awslabs.github.io/mcp/" target="_blank">📖 Docs MCP AWS</a>
-      <a class="sidebar-item" href="https://catalog.us-east-1.prod.workshops.aws/workshops/7e5a3b66-1e87-45cd-bfaa-025c3d5f28ac/en-US/012-knowledge-check" target="_blank">📝 Evaluación</a>
       <a class="sidebar-item" href="https://tinyurl.com/slack-bigcheese" target="_blank">💬 Canal de Slack</a>
       <a class="sidebar-item" href="https://tinyurl.com/encuesta-bigcheese" target="_blank">🎟️ Vouchers AWS</a>
     </div>
@@ -86,10 +86,14 @@
     { file: 'Modulo-11-Demo-Propuesta-Comercial.md',      title: 'Demo: Propuesta Comercial' },
     { file: 'Modulo-12-Demo-Seleccion-de-Candidatos.md',  title: 'Demo: Selección de Candidatos' },
     { file: 'Modulo-13-Repaso-Las-Tres-Primitivas.md',    title: 'Repaso: Las Tres Primitivas' },
+    { file: null,                                         title: 'Evaluación' },
   ];
 
   const params = new URLSearchParams(window.location.search);
-  const modIndex = parseInt(params.get('m') || '0', 10);
+  let modIndex = parseInt(params.get('m') || '0', 10);
+  if (isNaN(modIndex) || modIndex < 0 || modIndex >= MODULES.length) {
+    modIndex = 0;
+  }
   const mod = MODULES[modIndex];
 
   // Mark active sidebar item
@@ -100,39 +104,258 @@
   if (mod) document.title = `Módulo ${modIndex}: ${mod.title} — BigCheese Workshop MCP`;
 
   function fixLinks(md) {
+    if (typeof md !== 'string') return '';
     return md.replace(/\[([^\]]+)\]\(\.\/Modulo-(\d+)-[^)]+\.md\)/g, (_, text, num) => {
       return `[${text}](modulo.html?m=${num})`;
     });
   }
 
   function fixImages(html) {
+    if (typeof html !== 'string') return '';
     // Fix relative image paths to use GitHub Pages absolute path
     return html.replace(/src="assets\/img\//g, 'src="/bigcheese-mcp-workshop/assets/img/');
   }
 
+  // ── QUIZ DATA (módulo 14) ──────────────────────────────────────────────────
+  const QUIZ = [
+    {
+      q: '¿Cuál es el propósito principal del Model Context Protocol (MCP)?',
+      opts: [
+        'Reemplazar completamente a los modelos de lenguaje',
+        'Estandarizar cómo las aplicaciones proporcionan contexto a los LLMs',
+        'Crear una nueva arquitectura de redes neuronales',
+        'Optimizar el rendimiento de AWS Bedrock'
+      ],
+      correct: 1,
+      explanation: 'MCP es un protocolo abierto que estandariza cómo las aplicaciones proporcionan contexto a los LLMs, permitiendo una integración más fluida entre sistemas y modelos.'
+    },
+    {
+      q: '¿Cuáles son las tres primitivas fundamentales de MCP?',
+      opts: [
+        'Tools, Resources, y Prompts',
+        'Models, Clients, y Servers',
+        'Input, Output, y Processing',
+        'Request, Response, y Callback'
+      ],
+      correct: 0,
+      explanation: 'Las tres primitivas de MCP son: Tools (herramientas que el modelo puede invocar), Resources (datos que el modelo puede leer), y Prompts (plantillas de flujos de trabajo).'
+    },
+    {
+      q: '¿Qué rol cumple el Cliente MCP en la arquitectura?',
+      opts: [
+        'Ejecuta las herramientas directamente',
+        'Almacena los datos de la aplicación',
+        'Orquesta la comunicación entre la aplicación y el servidor MCP',
+        'Entrena el modelo de lenguaje'
+      ],
+      correct: 2,
+      explanation: 'El cliente MCP actúa como orquestador, conectando la aplicación host con uno o más servidores MCP y gestionando la comunicación bidireccional.'
+    },
+    {
+      q: '¿Qué es el MCP Inspector?',
+      opts: [
+        'Una herramienta de debugging para servidores MCP',
+        'Un monitor de rendimiento para AWS Bedrock',
+        'Un editor de código especializado',
+        'Un sistema de logs centralizado'
+      ],
+      correct: 0,
+      explanation: 'El MCP Inspector es una herramienta visual que permite probar y debuggear servidores MCP sin necesidad de implementar un cliente completo.'
+    },
+    {
+      q: '¿Cuál es la diferencia principal entre Tools y Resources en MCP?',
+      opts: [
+        'Tools son síncronos, Resources son asíncronos',
+        'Tools son invocados por el modelo, Resources son leídos directamente por la aplicación',
+        'Tools son más rápidos que Resources',
+        'No hay diferencia, son sinónimos'
+      ],
+      correct: 1,
+      explanation: 'Tools son funciones que el modelo puede invocar para realizar acciones, mientras que Resources son datos que la aplicación puede leer directamente sin pasar por el modelo.'
+    },
+    {
+      q: '¿Qué protocolo de mensajería utiliza MCP para la comunicación?',
+      opts: [
+        'HTTP/REST exclusivamente',
+        'WebSockets exclusivamente',
+        'JSON-RPC sobre stdio o SSE',
+        'gRPC'
+      ],
+      correct: 2,
+      explanation: 'MCP utiliza JSON-RPC 2.0 como protocolo de mensajería, que puede transportarse sobre stdio (standard input/output) o SSE (Server-Sent Events).'
+    },
+    {
+      q: 'En el caso de XYZ S.A., ¿qué problema resolvió MCP?',
+      opts: [
+        'Reducir los costos de infraestructura',
+        'Estandarizar el acceso a datos internos para el chatbot',
+        'Mejorar la velocidad de respuesta del modelo',
+        'Eliminar la necesidad de desarrolladores'
+      ],
+      correct: 1,
+      explanation: 'MCP permitió a Santiago estandarizar cómo el chatbot accede a datos internos de XYZ (propuestas, CVs, etc.) sin tener que crear integraciones personalizadas para cada fuente de datos.'
+    },
+    {
+      q: '¿Qué ventaja ofrece el uso de Prompts en MCP?',
+      opts: [
+        'Aumenta la velocidad de procesamiento del modelo',
+        'Reduce el costo de las llamadas a la API',
+        'Encapsula flujos de trabajo complejos en comandos simples',
+        'Elimina la necesidad de herramientas'
+      ],
+      correct: 2,
+      explanation: 'Los Prompts en MCP permiten empaquetar flujos de trabajo complejos (con múltiples pasos y contexto específico) en comandos simples que los usuarios pueden invocar fácilmente.'
+    },
+    {
+      q: '¿Cómo se identifican los recursos en MCP?',
+      opts: [
+        'Con una URL HTTP estándar',
+        'Con un nombre de función',
+        'Con una URI definida por el servidor',
+        'Con un número de índice'
+      ],
+      correct: 2,
+      explanation: 'Los recursos se identifican con URIs cuyo esquema es definido por cada servidor MCP. Por ejemplo, en el workshop usamos URIs como "proposal://bigcheese" o "talent://all".'
+    },
+    {
+      q: '¿Qué servicio de AWS se utilizó en el workshop para el modelo de lenguaje?',
+      opts: [
+        'Amazon SageMaker',
+        'AWS Lambda',
+        'Amazon Bedrock',
+        'Amazon Comprehend'
+      ],
+      correct: 2,
+      explanation: 'El workshop utilizó Amazon Bedrock, el servicio de AWS que proporciona acceso a modelos de lenguaje de última generación a través de una API unificada.'
+    }
+  ];
+
+  function buildQuiz() {
+    const letters = ['A', 'B', 'C', 'D'];
+    return QUIZ.map((item, i) => {
+      const num = i + 1;
+      const options = item.opts.map((opt, j) => `
+        <li>
+          <label for="q${num}o${j}">
+            <input type="radio" name="q${num}" value="${j}" id="q${num}o${j}">
+            <span class="opt-letter">${letters[j]}</span><span class="opt-text">${opt}</span>
+          </label>
+        </li>`).join('');
+      return `
+        <div class="quiz-question" id="question-${num}">
+          <div class="quiz-question-header">
+            <span class="quiz-question-num">Pregunta ${num}</span>
+          </div>
+          <p class="quiz-question-text">${item.q}</p>
+          <ul class="quiz-options">${options}</ul>
+          <button class="quiz-check-btn" data-q="${num}">Verificar Respuesta</button>
+          <div class="quiz-feedback" id="feedback-${num}"></div>
+        </div>`;
+    }).join('<hr class="quiz-divider">');
+  }
+
+  function initQuiz() {
+    document.querySelectorAll('.quiz-options li').forEach(li => {
+      li.addEventListener('click', (e) => {
+        const radio = li.querySelector('input[type="radio"]');
+        if (!radio || radio.disabled || radio.checked) return;
+        if (e.target.tagName !== 'INPUT') {
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    });
+
+    document.querySelectorAll('.quiz-check-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        const num = parseInt(this.dataset.q);
+        const item = QUIZ[num - 1];
+        const selected = document.querySelector(`input[name="q${num}"]:checked`);
+        const feedback = document.getElementById(`feedback-${num}`);
+        const letters = ['A', 'B', 'C', 'D'];
+
+        if (!selected) {
+          feedback.className = 'quiz-feedback feedback-warning';
+          feedback.innerHTML = '⚠️ Seleccioná una respuesta antes de verificar.';
+          feedback.style.display = 'block';
+          return;
+        }
+
+        // Lock question
+        this.disabled = true;
+        document.querySelectorAll(`input[name="q${num}"]`).forEach(r => r.disabled = true);
+
+        const chosenIdx = parseInt(selected.value);
+        const isCorrect = chosenIdx === item.correct;
+
+        // Color the chosen option
+        selected.closest('li').classList.add(isCorrect ? 'opt-correct' : 'opt-wrong');
+
+        // Always highlight the correct option
+        if (!isCorrect) {
+          document.getElementById(`q${num}o${item.correct}`).closest('li').classList.add('opt-correct');
+        }
+
+        feedback.style.display = 'block';
+        if (isCorrect) {
+          feedback.className = 'quiz-feedback feedback-correct';
+          feedback.innerHTML = `<span class="fb-icon">✅</span><div><strong>¡Correcto!</strong><br>${item.explanation}</div>`;
+        } else {
+          feedback.className = 'quiz-feedback feedback-incorrect';
+          feedback.innerHTML = `<span class="fb-icon">❌</span><div><strong>Incorrecto.</strong> La respuesta correcta es <strong>${letters[item.correct]}</strong>.<br>${item.explanation}</div>`;
+        }
+      });
+    });
+  }
+
+  // ── MODULE LOADER ──────────────────────────────────────────────────────────
   async function loadModule() {
-    if (!mod) {
+
+    const prev = modIndex > 0
+      ? `<a class="mod-nav-btn" href="modulo.html?m=${modIndex - 1}">← Módulo ${modIndex - 1}</a>`
+      : `<a class="mod-nav-btn" href="index.html">← Inicio</a>`;
+
+    const next = modIndex < MODULES.length - 1
+      ? `<a class="mod-nav-btn primary" href="modulo.html?m=${modIndex + 1}">Módulo ${modIndex + 1} →</a>`
+      : `<a class="mod-nav-btn primary" href="index.html">Volver al inicio →</a>`;
+
+    // Módulo 14: quiz interactivo — renderizado directo, sin fetch ni marked
+    if (modIndex === 14) {
+      document.getElementById('content').innerHTML = `
+        <div class="md-content">
+          <h1>📝 Evaluación de Conocimientos</h1>
+          <p>Seleccioná una opción en cada pregunta y hacé clic en <strong>Verificar Respuesta</strong> para ver el resultado al instante.</p>
+          <div id="quiz-container">${buildQuiz()}</div>
+          <hr>
+          <h2>📚 Próximos Pasos</h2>
+          <ul>
+            <li>Experimentá con el código: modificá el servidor y cliente para agregar nuevas funcionalidades.</li>
+            <li>Explorá la <a href="https://modelcontextprotocol.io/" target="_blank">documentación oficial de MCP</a>.</li>
+            <li>Contanos en el <a href="https://tinyurl.com/slack-bigcheese" target="_blank">canal de Slack</a> qué te pareció el workshop.</li>
+            <li>Completá la <a href="https://tinyurl.com/encuesta-bigcheese" target="_blank">encuesta</a> para recibir tus créditos de AWS.</li>
+          </ul>
+        </div>
+        <div class="mod-nav">${prev}${next}</div>
+      `;
+      initQuiz();
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    if (!mod || !mod.file) {
       document.getElementById('content').innerHTML = '<p>Módulo no encontrado.</p>';
       return;
     }
 
-    const base = 'https://raw.githubusercontent.com/mguerrerobigcheese/bigcheese-mcp-workshop/main/modulos/';
+    const base = 'https://raw.githubusercontent.com/bigcheeseuy/bigcheese-ai-platform-workshop/main/modulos/';
     const url = base + mod.file;
 
     try {
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const raw = await res.text();
-      const fixed = fixLinks(raw);
-      const html = fixImages(marked.parse(fixed));
-
-      const prev = modIndex > 0
-        ? `<a class="mod-nav-btn" href="modulo.html?m=${modIndex - 1}">← Módulo ${modIndex - 1}</a>`
-        : `<a class="mod-nav-btn" href="index.html">← Inicio</a>`;
-
-      const next = modIndex < MODULES.length - 1
-        ? `<a class="mod-nav-btn primary" href="modulo.html?m=${modIndex + 1}">Módulo ${modIndex + 1} →</a>`
-        : `<a class="mod-nav-btn primary" href="index.html">Volver al inicio →</a>`;
+      const fixed = fixLinks(raw || '');
+      const html = fixImages(marked.parse(fixed || ''));
 
       document.getElementById('content').innerHTML = `
         <div class="md-content">${html}</div>
@@ -144,7 +367,7 @@
       document.getElementById('content').innerHTML = `
         <div class="md-content">
           <h2>Error al cargar el módulo</h2>
-          <p>No se pudo cargar el contenido. Intentá recargar la página o <a href="https://github.com/mguerrerobigcheese/bigcheese-mcp-workshop/tree/main/modulos" target="_blank">ver el archivo directamente en GitHub</a>.</p>
+          <p>No se pudo cargar el contenido. Intentá recargar la página o <a href="https://github.com/bigcheeseuy/bigcheese-ai-platform-workshop/tree/main/modulos" target="_blank">ver el archivo directamente en GitHub</a>.</p>
           <pre><code>${err.message}</code></pre>
         </div>
       `;
